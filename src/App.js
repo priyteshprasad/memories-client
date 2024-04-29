@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useEffect} from "react";
 // import all the components that we are going to user
 // all start with capital letter
 import {Container, AppBar, Typography, Grid, Grow} from '@material-ui/core'
 import Posts from './components/Posts/Posts';
 import Form from './components/Form/Form'
 import memories from './images/memories.png';
-import userStyles from "./styles"
+
+import userStyles from "./styles";
+import { useDispatch } from 'react-redux'; //dispatch an action
+
+import { getPosts } from './actions/posts'
 
 const App = () => {
     const classes = userStyles();
+    const dispatch = useDispatch();
+    useEffect(() =>{
+        dispatch(getPosts()); //successful dispatch
+    }, [dispatch])
     return ( 
         <Container maxWidth='lg' >
             <AppBar className={classes.appBar} position="static" color="inherit">
