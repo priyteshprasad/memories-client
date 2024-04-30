@@ -87,7 +87,7 @@ const Form = () => {
         </div>
         <Button
           className={classes.buttonSubmit}
-          variant="container"
+          variant="contained"
           color="primary"
           size="large"
           type="submit"
@@ -95,7 +95,7 @@ const Form = () => {
           Submit
         </Button>
         <Button
-          variant="container"
+          variant="contained"
           color="secondary"
           size="small"
           onClick={clear}
