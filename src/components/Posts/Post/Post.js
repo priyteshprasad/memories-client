@@ -13,7 +13,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import moment from "moment";
 
-const Post = ({ post }) => {
+const Post = ({ post, setCurrentId }) => {
   const classes = userStyles();
   return (
     <Card className={classes.card}>
@@ -30,8 +30,15 @@ const Post = ({ post }) => {
         {/*30 min from now*/}
       </div>
       <div className={classes.overlay2}>
-        <Button style={{ color: "white" }} size="small" onClick={() => {}}>
-          <MoreHorizIcon fontSize="default" />
+        {/* three dots on top right */}
+        <Button
+          style={{ color: "white" }}
+          size="small"
+          onClick={() => {
+            setCurrentId(post._id); //the function changes the currentId in the App.js
+          }}
+        >
+          <MoreHorizIcon fontSize="medium" />
         </Button>
       </div>
       <div className={classes.details}>
@@ -40,7 +47,7 @@ const Post = ({ post }) => {
         </Typography>
       </div>
       <CardContent>
-        <Typography variant="h5" color={classes.title} gutterBottom>
+        <Typography variant="h5" color="primary" gutterBottom>
           {post.message}
         </Typography>
       </CardContent>

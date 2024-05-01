@@ -4,10 +4,9 @@ import Post from "./Post/Post";
 import userStyles from "./styles";
 import { Grid, CircularProgress } from "@material-ui/core";
 
-const Posts = () => {
+const Posts = ({ setCurrentId }) => {
   const posts = useSelector((state) => state.posts);
   const classes = userStyles();
-  console.log("Line 10", posts);
   return !posts.length ? (
     <CircularProgress />
   ) : (
@@ -24,7 +23,8 @@ const Posts = () => {
             post //putting () instead of {}
           ) => (
             <Grid item key={post._id} xs={12} sm={6}>
-              <Post post={post} /> {/* sending post object as prop */}
+              <Post post={post} setCurrentId={setCurrentId} />
+              {/*PROPS DRILLING: sending post object as prop ; we recieved setCurrentId and now sending it to Post component i.e. layer by transfer which is resolved by redux*/}
             </Grid>
           )
         )

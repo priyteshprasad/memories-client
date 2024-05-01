@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FileBase from "react-file-base64";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   TextField,
   Button,
@@ -9,8 +9,11 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 import userStyles from "./styles";
-import { createPost } from "../../actions/posts";
-const Form = () => {
+import { createPost, updatePost } from "../../actions/posts";
+
+// we have to get the id inorder to update
+
+const Form = ({ currentId, setCurrentId }) => {
   const [postData, setPostData] = useState({
     creator: "",
     title: "",
@@ -20,10 +23,27 @@ const Form = () => {
   });
   const classes = userStyles();
   const dispatch = useDispatch();
+  const post = useSelector((state) =>
+    currentId ? state.posts.find((p) => p._id === currentId) : null
+  ); //if we have id then we want to send the post with that id
+
+  // useEffect is used to populate the values of the form
+  useEffect(() => {
+    if (post) {
+      setPostData(post);
+    }
+  }, [post]); //accept callback and dependency array
 
   const handleSubmit = (e) => {
     e.preventDefault(); //stop refresh
-    dispatch(createPost(postData));
+
+    if (currentId) {
+      //if we have currentId, then we want to update the post
+      dispatch(updatePost(currentId, postData));
+    } else {
+      // otherwise we want to create a new post
+      dispatch(createPost(postData));
+    }
   };
 
   const clear = () => {};
