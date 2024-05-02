@@ -21,6 +21,7 @@ const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getPosts()); //successful dispatch
+    // as soon as we change the currentId, dispatch will run to getPosts
   }, [currentId, dispatch]);
   return (
     <Container maxWidth="lg">
