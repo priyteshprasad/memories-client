@@ -44,12 +44,18 @@ const Form = ({ currentId, setCurrentId }) => {
       // otherwise we want to create a new post
       dispatch(createPost(postData));
     }
-    clear() //on click of submit button
+    clear(); //on click of submit button
   };
   //clar the input fiels
   const clear = () => {
     setCurrentId(null);
-    setPostData({ creator: "", title: "", message: "", tags: "", selectedFile: "",})
+    setPostData({
+      creator: "",
+      title: "",
+      message: "",
+      tags: "",
+      selectedFile: "",
+    });
   };
   return (
     <Paper className={classes.paper}>
@@ -99,10 +105,13 @@ const Form = ({ currentId, setCurrentId }) => {
           fullWidth
           value={postData.tags}
           onChange={(event) =>
-            setPostData({ ...postData, tags: event.target.value })
+            setPostData({
+              ...postData,
+              tags: event.target.value.split(",").map((str) => str.trim()),
+            })
           }
         />
-        <div className="classes.fileInput">
+        <div className={classes.fileInput}>
           <FileBase
             type="file"
             multiple={false}
@@ -117,6 +126,7 @@ const Form = ({ currentId, setCurrentId }) => {
           color="primary"
           size="large"
           type="submit"
+          fullWidth
         >
           Submit
         </Button>
