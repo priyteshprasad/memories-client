@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 // import all the components that we are going to user
 // all start with capital letter
 import { Container } from "@material-ui/core";
 
 import Navbar from "./components/Navbar/Navbar";
+
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import Home from "./components/Home/Home";
+import Auth from "./components/Auth/Auth";
 
 // in order to update we have to transfer data between Posts and Form component
 // App is the parent of both, so we will do it here
