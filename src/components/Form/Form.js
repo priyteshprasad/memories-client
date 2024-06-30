@@ -15,7 +15,7 @@ import { createPost, updatePost } from "../../actions/posts";
 
 const Form = ({ currentId, setCurrentId }) => {
   const [postData, setPostData] = useState({
-    creator: "",
+    // creator: "",
     title: "",
     message: "",
     tags: "",
@@ -33,16 +33,18 @@ const Form = ({ currentId, setCurrentId }) => {
       setPostData(post);
     }
   }, [post]); //accept callback and dependency array
-
+  const user = JSON.parse(localStorage.getItem("profile"));
   const handleSubmit = (e) => {
     e.preventDefault(); //stop refresh
 
     if (currentId) {
       //if we have currentId, then we want to update the post
-      dispatch(updatePost(currentId, postData));
+      dispatch(
+        updatePost(currentId, { ...postData, name: user?.result?.name })
+      );
     } else {
       // otherwise we want to create a new post
-      dispatch(createPost(postData));
+      dispatch(createPost({ ...postData, name: user?.result?.name }));
     }
     clear(); //on click of submit button
   };
@@ -50,13 +52,22 @@ const Form = ({ currentId, setCurrentId }) => {
   const clear = () => {
     setCurrentId(null);
     setPostData({
-      creator: "",
+      // creator: "",
       title: "",
       message: "",
       tags: "",
       selectedFile: "",
     });
   };
+  if (!user?.result?.name) {
+    return (
+      <Paper className={classes.paper}>
+        <Typography variant="h6" align="center">
+          Please Sign in to create your own memory and like other's memory
+        </Typography>
+      </Paper>
+    );
+  }
   return (
     <Paper className={classes.paper}>
       <form
@@ -68,7 +79,7 @@ const Form = ({ currentId, setCurrentId }) => {
         <Typography variant="h6">
           {currentId ? "Editing" : "Creating"} a Memory
         </Typography>
-        <TextField
+        {/* <TextField
           name="creator"
           variant="outlined"
           label="Creator"
@@ -77,7 +88,7 @@ const Form = ({ currentId, setCurrentId }) => {
           onChange={(event) =>
             setPostData({ ...postData, creator: event.target.value })
           }
-        />
+        /> */}
         <TextField
           name="title"
           variant="outlined"

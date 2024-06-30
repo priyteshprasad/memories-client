@@ -15,12 +15,33 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Input from "./Input";
 import { useDispatch } from "react-redux";
 import jwtDecode from "jwt-decode";
+import { signin, signup } from "../../actions/auth.js";
+
+const initialState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
+
 const Auth = () => {
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
-  const handleSubmit = () => {};
-  const handleChange = () => {};
+  const [formData, setFormData] = useState(initialState);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (isSignup) {
+      dispatch(signup(formData, history));
+    } else {
+      dispatch(signin(formData, history));
+    }
+  };
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
   const dispatch = useDispatch();
   const history = useHistory();
   const handleShowPassword = () => {
@@ -28,7 +49,7 @@ const Auth = () => {
   };
   const switchMode = () => {
     setIsSignup((prev) => !prev);
-    handleShowPassword(false);
+    setShowPassword(false);
   };
   const googleSuccess = async (res) => {
     console.log("google sign in success", res);
@@ -40,7 +61,7 @@ const Auth = () => {
       dispatch({ type: "AUTH", data: { result, token: credential } });
       history.push("/");
     } catch (error) {
-      console.log("line 42", error);
+      console.log(error);
     }
   };
   const googleFailure = (error) => {
@@ -64,8 +85,8 @@ const Auth = () => {
                   handleChange={handleChange}
                 />
                 <Input
-                  name="firstName"
-                  label="First Name"
+                  name="lastName"
+                  label="Last Name"
                   handleChange={handleChange}
                 />
               </>
@@ -88,6 +109,7 @@ const Auth = () => {
                 name="confirmPassword"
                 label="Repeat Password"
                 handleChange={handleChange}
+                type="password"
               />
             )}
           </Grid>
@@ -100,25 +122,6 @@ const Auth = () => {
           >
             {isSignup ? "Sign Up" : "Sign In"}
           </Button>
-          {/* <GoogleLogin
-            clientId="109932179893-jbvlcias87pqk21867gr7fkjfqa5ki23.apps.googleusercontent.com"
-            render={(renderProps) => (
-              <Button
-                className={classes.googleButton}
-                color="primary"
-                fullWidth
-                onClick={renderProps.onClick}
-                disabled={renderProps.disabled}
-                startIcon={<Icon />}
-                variant="contained"
-              >
-                Google Sign In
-              </Button>
-            )}
-            onSuccess={googleSuccess}
-            onFailure={googleFailure}
-            cookiePolicy="single_host_origin"
-          /> */}
           <GoogleLogin
             onSuccess={googleSuccess}
             onError={googleFailure}

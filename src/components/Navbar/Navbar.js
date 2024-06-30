@@ -4,22 +4,29 @@ import useStyles from "./styles";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import memories from "../../images/memories.png";
 import { useDispatch } from "react-redux";
+import jwtDecode from "jwt-decode";
 const Navbar = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
   const classes = useStyles();
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
-  console.log("user...", user);
-  useEffect(() => {
-    const token = user?.token;
-    setUser(JSON.parse(localStorage.getItem("profile")));
-  }, [location]);
   const logout = () => {
     dispatch({ type: "LOGOUT" });
     history.push("/");
     setUser(null);
   };
+  useEffect(() => {
+    const token = user?.token;
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.exp * 1000 < new Date().getTime()) {
+        logout();
+      }
+    }
+    setUser(JSON.parse(localStorage.getItem("profile")));
+  }, [location]);
+
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
       <div className={classes.brandContainer}>
