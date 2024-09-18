@@ -23,7 +23,14 @@ export const getPosts = () => async (dispatch) => {
 };
 // const action = {type: 'FETCH_ALL', payload: []}
 // dispatch(action)
-
+export const getPostBySearch = (query) => async (dispatch) => {
+  try {
+    const {data: { data }} = await api.fetchPostsBySearch(query)
+    console.log(data)
+  } catch (error) {
+    console.log(error.message)
+  }
+}
 export const createPost = (post) => async (dispatch) => {
   try {
     const { data } = await api.createPost(post); //making a post api request
