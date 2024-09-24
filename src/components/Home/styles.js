@@ -24,4 +24,8 @@ export default makeStyles((theme) => ({
       flexDirection: "column-reverse",
     },
   },
+  pagination :{
+    margin: "20px 0px 20px 0px",
+    padding: "10px"
+  }
 }));

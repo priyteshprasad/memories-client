@@ -31,33 +31,35 @@ const Home = () => {
   const searchQuery = query.get("searchQuery");
   const [search, setSearch] = useState("");
   const [tags, setTags] = useState([]);
-  useEffect(() => {
-    dispatch(getPosts()); //successful dispatch
-    // as soon as we change the currentId, dispatch will run to getPosts
-  }, [currentId, dispatch]);
+  // useEffect(() => {
+  //   dispatch(getPosts()); //successful dispatch
+  //   // as soon as we change the currentId, dispatch will run to getPosts
+  // }, [currentId, dispatch]);
   const handleKeyPress = (e) => {
-    if(e.keyCode === 13){
+    if (e.key === "Enter") {
       // enter key
-      searchPost()
+      searchPost();
     }
-  }
+  };
   const handleAdd = (tag) => {
-    setTags([...tags, tag])
-  }
+    setTags([...tags, tag]);
+  };
   const handleDelete = (tagToDelete) => {
-    setTags(tags.filter((tag) => tag !== tagToDelete))
-  }
-  const searchPost =()=> {
-    if(search.trim() || tags){
+    setTags(tags.filter((tag) => tag !== tagToDelete));
+  };
+  const searchPost = () => {
+    if (search.trim() || tags) {
       // dispatch => fetch search post
       // first create redux action to search the post
-      console.log("searchingfor", search)
-      dispatch(getPostBySearch({search, tags:tags.join(',')}));
-      history.push(`/posts/search?searchQuery=${search || none}&tags=${tags.join(',')}`)
-    }else{
-      history.push('/')
+      console.log("searchingfor", search);
+      dispatch(getPostBySearch({ search, tags: tags.join(",") }));
+      history.push(
+        `/posts/search?searchQuery=${search || null}&tags=${tags.join(",")}`
+      );
+    } else {
+      history.push("/");
     }
-  }
+  };
   return (
     <Grow in>
       {/* Grow provides simple animation, property-> in to make it grow-in */}
@@ -88,30 +90,35 @@ const Home = () => {
                 onChange={(e) => {
                   setSearch(e.target.value);
                 }}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyPress}
+                
               />
-              <ChipInput 
-                style={{margin: "10px 0"}}
+              <ChipInput
+                style={{ margin: "10px 0" }}
                 value={tags}
                 onAdd={handleAdd}
                 onDelete={handleDelete}
                 label="Search Tags"
                 variant="outlined"
                 fullWidth
+                
               />
               <Button
                 onClick={searchPost}
                 className={classes.searchButton}
                 color="primary"
                 variant="contained"
-
-              >Search</Button>
+              >
+                Search
+              </Button>
             </AppBar>
             <Form currentId={currentId} setCurrentId={setCurrentId} />
             {/* we are sending props so we will recieve the props */}
-            <Paper className={classes.pagination} elevation={6}>
-              <Pagination />
-            </Paper>
+            {!searchQuery && !tags.length && (
+              <Paper className={classes.pagination} elevation={6} >
+                <Pagination page={page} />
+              </Paper>
+            )}
           </Grid>
         </Grid>
       </Container>

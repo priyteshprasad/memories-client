@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { AppBar, Typography, Toolbar, Avatar, Button } from "@material-ui/core";
 import useStyles from "./styles";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import memories from "../../images/memories.png";
+import memoriesLogo from "../../images/memories.png";
+import memoriesText from "../../images/memories-Text.png";
 import { useDispatch } from "react-redux";
 import jwtDecode from "jwt-decode";
 const Navbar = () => {
@@ -29,23 +30,21 @@ const Navbar = () => {
 
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
-      <div className={classes.brandContainer}>
-        <Typography
-          component={Link}
-          to="/"
-          className={classes.heading}
-          variant="h2"
-          align="center"
-        >
-          Memories
-        </Typography>
+      <Link to="/" className={classes.brandContainer}>
+        
         <img
           className={classes.image}
-          src={memories}
+          src={memoriesText}
           alt="memories"
           height="60"
         ></img>
-      </div>
+        <img
+          className={classes.image}
+          src={memoriesLogo}
+          alt="memories"
+          height="60"
+        ></img>
+      </Link>
       <Toolbar className={classes.toolbar}>
         {user ? (
           <div className={classes.profile}>

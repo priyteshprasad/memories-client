@@ -7,7 +7,7 @@ export default makeStyles((theme) => ({
     margin: "30px 0",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
     padding: "10px 50px",
   },
@@ -31,6 +31,10 @@ export default makeStyles((theme) => ({
   userName: {
     display: "flex",
     alignItems: "center",
+  },
+  brandContainer:{
+    display: "flex",
+    alignItems: "center"
   },
   purple: {
     color: theme.palette.getContrastText(deepPurple[500]),

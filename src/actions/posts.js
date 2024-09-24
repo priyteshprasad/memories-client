@@ -5,6 +5,9 @@ import {
   DELETE,
   LIKE,
   UPDATE,
+  FETCH_BY_SEARCH,
+  START_LOADING,
+  END_LOADING
 } from "../constants/actionTypes";
 
 // api.fetchPosts
@@ -12,11 +15,13 @@ import {
 //an action just an object that has type and payload
 // instead to returning an action we have to dispatch it
 
-export const getPosts = () => async (dispatch) => {
+export const getPosts = (page) => async (dispatch) => {
   try {
-    const { data } = await api.fetchPosts();
+    dispatch({type: START_LOADING})
+    const { data } = await api.fetchPosts(page);
     // console.log("data fetched successfully", data);
     dispatch({ type: FETCH_ALL, payload: data });
+    dispatch({type: END_LOADING})
   } catch (error) {
     console.log(error.message);
   }
@@ -25,16 +30,21 @@ export const getPosts = () => async (dispatch) => {
 // dispatch(action)
 export const getPostBySearch = (query) => async (dispatch) => {
   try {
+    dispatch({type: START_LOADING})
     const {data: { data }} = await api.fetchPostsBySearch(query)
     console.log(data)
+    dispatch({ type: FETCH_BY_SEARCH, payload: data });
+    dispatch({type: END_LOADING})
   } catch (error) {
     console.log(error.message)
   }
 }
 export const createPost = (post) => async (dispatch) => {
   try {
+    dispatch({type: START_LOADING})
     const { data } = await api.createPost(post); //making a post api request
     dispatch({ type: CREATE, payload: data });
+    dispatch({type: END_LOADING})
   } catch (error) {
     console.log(error);
   }
