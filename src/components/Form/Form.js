@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import userStyles from "./styles";
 import { createPost, updatePost } from "../../actions/posts";
+import { useHistory } from "react-router-dom";
 
 // we have to get the id inorder to update
 
@@ -23,8 +24,9 @@ const Form = ({ currentId, setCurrentId }) => {
   });
   const classes = userStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
   const post = useSelector((state) =>
-    currentId ? state.posts.find((p) => p._id === currentId) : null
+    currentId ? state.posts.posts.find((p) => p._id === currentId) : null
   ); //if we have id then we want to send the post with that id
 
   // useEffect is used to populate the values of the form
@@ -44,7 +46,8 @@ const Form = ({ currentId, setCurrentId }) => {
       );
     } else {
       // otherwise we want to create a new post
-      dispatch(createPost({ ...postData, name: user?.result?.name }));
+      dispatch(createPost({ ...postData, name: user?.result?.name }, history));
+      
     }
     clear(); //on click of submit button
   };

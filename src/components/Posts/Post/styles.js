@@ -50,5 +50,9 @@ export default makeStyles({
         display: 'flex',
         justifyContent: 'space-between',
       },
+      cardAction: {
+        display: 'block',
+        textAlign: 'initial',
+      },
 })
 

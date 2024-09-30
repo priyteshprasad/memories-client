@@ -11,6 +11,7 @@ API.interceptors.request.use((req) => {
   return req;
 });
 // export const fetchPosts = () => axios.get(url);
+export const fetchPost = (id) => API.get(`/posts/${id}`)
 export const fetchPosts = (page) => API.get(`/posts?page=${page}`);
 export const fetchPostsBySearch = (query) => API.get(`/posts/search?searchQuery=${query.search || 'none'}&tags=${query.tags}`)
 export const createPost = (newPost) => API.post("/posts", newPost);

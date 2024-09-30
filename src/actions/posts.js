@@ -7,9 +7,22 @@ import {
   UPDATE,
   FETCH_BY_SEARCH,
   START_LOADING,
-  END_LOADING
+  END_LOADING,
+  FETCH_POST
 } from "../constants/actionTypes";
 
+
+export const getPost = (id) => async (dispatch) => {
+  try {
+    dispatch({type: START_LOADING})
+    const { data } = await api.fetchPost(id);
+    // console.log("data fetched successfully", data);
+    dispatch({ type: FETCH_POST, payload: data });
+    dispatch({type: END_LOADING})
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 // api.fetchPosts
 // Action Creaters are functions that return an action
 //an action just an object that has type and payload
@@ -39,12 +52,13 @@ export const getPostBySearch = (query) => async (dispatch) => {
     console.log(error.message)
   }
 }
-export const createPost = (post) => async (dispatch) => {
+export const createPost = (post, history) => async (dispatch) => {
   try {
     dispatch({type: START_LOADING})
     const { data } = await api.createPost(post); //making a post api request
+    history.push(`/post/${data._id}`)
     dispatch({ type: CREATE, payload: data });
-    dispatch({type: END_LOADING})
+    // dispatch({type: END_LOADING})
   } catch (error) {
     console.log(error);
   }
