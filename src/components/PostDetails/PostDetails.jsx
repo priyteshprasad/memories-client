@@ -10,6 +10,7 @@ import moment from "moment"; //lybrari deals with time
 import { useParams, useHistory, Link } from "react-router-dom";
 import useStyles from "./styles.js";
 import { getPost, getPostBySearch } from "../../actions/posts.js";
+import CommentSection from "./CommentSection.jsx";
 function PostDetails() {
   const { post, posts, isLoading } = useSelector((state) => state.posts);
   const dispatch = useDispatch();
@@ -76,6 +77,8 @@ function PostDetails() {
           <Typography variant="body1">
             <strong>Comments - coming soon!</strong>
           </Typography>
+          <Divider style={{ margin: "20px 0" }}></Divider>
+          <CommentSection post={post}/>
           <Divider style={{ margin: "20px 0" }}></Divider>
         </div>
         <div className={classes.imageSection}>

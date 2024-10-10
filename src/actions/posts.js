@@ -8,7 +8,8 @@ import {
   FETCH_BY_SEARCH,
   START_LOADING,
   END_LOADING,
-  FETCH_POST
+  FETCH_POST,
+  COMMENT
 } from "../constants/actionTypes";
 
 
@@ -90,5 +91,18 @@ export const likePost = (id) => async (dispatch) => {
     console.log(error.message);
   }
 };
+
+export const commentPost = (value, id) => async (dispatch) =>{
+  // considuring that data is async we have to use redux thunk
+  try {
+    const {data} = await api.comment(value, id) //data of a post with new comment
+    dispatch({type: COMMENT, payload: data})
+    return data.comments
+    console.log(data) 
+
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 // after creating action => reducer

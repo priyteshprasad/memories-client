@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import userStyles from "./styles";
 import {
   Card,
@@ -28,22 +28,35 @@ const Post = ({ post, setCurrentId }) => {
     history.push(`/post/${post._id}`);
     console.log(post._id);
   };
+  const userId = user?.result?.sub || user?.result?._id
+  const [likes, setLikes] = useState(post?.likes)
+  const userHasLikedPost = likes.find((like)=> like === userId)
+  const handleLikeClick = async () => {
+    
+      dispatch(likePost(post._id));
+      if(userHasLikedPost){
+        setLikes(likes.filter((id)=> id!==userId))
+      }else{
+        setLikes([...likes, userId])
+      }
+    
+  }
   const Likes = () => {
-    if (post.likes.length > 0) {
-      return post.likes.find(
-        (like) => like === (user?.result?.sub || user?.result?._id)
+    if (likes.length > 0) {
+      return likes.find(
+        (like) => like === userId
       ) ? (
         <>
           <ThumbUpAltIcon fontSize="small" />
           &nbsp;
-          {post.likes.length > 2
-            ? `You and ${post.likes.length - 1} others`
-            : `${post.likes.length} like${post.likes.length > 1 ? "s" : ""}`}
+          {likes.length > 2
+            ? `You and ${likes.length - 1} others`
+            : `${likes.length} like${likes.length > 1 ? "s" : ""}`}
         </>
       ) : (
         <>
           <ThumbUpAltOutlined fontSize="small" />
-          &nbsp;{post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}
+          &nbsp;{likes.length} {likes.length === 1 ? "Like" : "Likes"}
         </>
       );
     }
@@ -111,9 +124,7 @@ const Post = ({ post, setCurrentId }) => {
           size="small"
           color="primary"
           disabled={!user?.result}
-          onClick={() => {
-            dispatch(likePost(post._id));
-          }}
+          onClick={handleLikeClick}
         >
           <Likes />
         </Button>
