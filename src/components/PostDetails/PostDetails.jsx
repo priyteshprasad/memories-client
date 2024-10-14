@@ -68,15 +68,7 @@ function PostDetails() {
           <Typography variant="h6">Created by: {post.name}</Typography>
           <Typography variant="body1">
             {moment(post.createdAt).fromNow()}
-          </Typography>
-          <Divider style={{ margin: "20px 0" }}></Divider>
-          <Typography variant="body1">
-            <strong>Realtime Chat - coming soon!</strong>
-          </Typography>
-          <Divider style={{ margin: "20px 0" }}></Divider>
-          <Typography variant="body1">
-            <strong>Comments - coming soon!</strong>
-          </Typography>
+          </Typography>      
           <Divider style={{ margin: "20px 0" }}></Divider>
           <CommentSection post={post}/>
           <Divider style={{ margin: "20px 0" }}></Divider>

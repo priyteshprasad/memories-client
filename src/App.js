@@ -14,11 +14,14 @@ import Home from "./components/Home/Home";
 import Auth from "./components/Auth/Auth";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import PostDetails from "./components/PostDetails/PostDetails";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.min.css';
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem('profile'))
   return (
     <GoogleOAuthProvider clientId="109932179893-jbvlcias87pqk21867gr7fkjfqa5ki23.apps.googleusercontent.com">
+      <ToastContainer />
       <BrowserRouter>
         <Container maxWidth="xl">
           <Navbar />

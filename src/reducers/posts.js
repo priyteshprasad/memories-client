@@ -44,7 +44,7 @@ export default (state =
       return {...state, posts: state.posts.map((post) =>
         post._id === action.payload._id ? action.payload : post
       )};
-      // return all the post tnormally
+      // return all the post normally
       // change the post which has new comment
     case DELETE:
       return {...state, posts: state.posts.filter((post) => post.id !== action.payload)};

@@ -12,7 +12,7 @@ import {
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import ThumbUpAltOutlined from "@material-ui/icons/ThumbUpAltOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import EditIcon from '@material-ui/icons/Edit';
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { deletePost, likePost } from "../../../actions/posts";
@@ -70,6 +70,21 @@ const Post = ({ post, setCurrentId }) => {
 
   return (
     <Card className={classes.card} raised elevation={6}>
+      {(user?.result?.googleId === post?.creator ||
+          user?.result?._id === post?.creator) && (
+          <div className={classes.overlay2}>
+            {/* three dots on top right */}
+            <Button
+              style={{ color: "white" }}
+              size="small"
+              onClick={() => {
+                setCurrentId(post._id); //the function changes the currentId in the App.js
+              }}
+            >
+              <EditIcon fontSize="medium" />
+            </Button>
+          </div>
+        )}
       <ButtonBase
         component="span"
         name="test"
@@ -89,21 +104,7 @@ const Post = ({ post, setCurrentId }) => {
           </Typography>{" "}
           {/*30 min from now*/}
         </div>
-        {(user?.result?.googleId === post?.creator ||
-          user?.result?._id === post?.creator) && (
-          <div className={classes.overlay2}>
-            {/* three dots on top right */}
-            <Button
-              style={{ color: "white" }}
-              size="small"
-              onClick={() => {
-                setCurrentId(post._id); //the function changes the currentId in the App.js
-              }}
-            >
-              <MoreHorizIcon fontSize="medium" />
-            </Button>
-          </div>
-        )}
+        
 
         <div className={classes.details}>
           <Typography variant="body2" color="textSecondary">

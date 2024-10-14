@@ -1,5 +1,6 @@
 import axios from "axios"; //use to make api calls
-const API = axios.create({ baseURL: "https://pp-memories-server.onrender.com" });
+// const API = axios.create({ baseURL: "https://pp-memories-server.onrender.com" });
+const API = axios.create({ baseURL: "http://localhost:8000/" });
 // const url = "http://localhost:5000/posts"; //pointing to backend
 
 API.interceptors.request.use((req) => {

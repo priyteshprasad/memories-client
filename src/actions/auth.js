@@ -7,6 +7,7 @@ import {
   UPDATE,
   AUTH,
 } from "../constants/actionTypes";
+import {toast}  from "react-toastify";
 
 export const signin = (formData, history) => async (dispatch) => {
   try {
@@ -17,16 +18,26 @@ export const signin = (formData, history) => async (dispatch) => {
     history.push("/");
   } catch (error) {
     console.log(error);
+    toast.error(error.response.data.message)
   }
 };
 export const signup = (formData, history) => async (dispatch) => {
   try {
+    // TODO: apply email format verification here
+
     // signup the user
-    // navigate tp home page
+    // navigate to home page
     const { data } = await api.signUp(formData);
-    dispatch({ type: AUTH, data });
-    history.push("/");
+    if(data.success){
+      toast.success("User Registered, please verify email and login")
+    }else{
+      toast.error("Registration unsuccessfull, please try again")
+    }
+    // dispatch({ type: AUTH, data });
+    history.push("/auth");
   } catch (error) {
+    toast.error(error.response.data.message)
     console.log(error);
+    
   }
 };
