@@ -42,6 +42,7 @@ export default makeStyles({
         display: 'flex',
         justifyContent: 'space-between',
         margin: '20px',
+        minHeight: "35px"
       },
       title: {
         padding: '0 16px',
@@ -55,5 +56,8 @@ export default makeStyles({
         display: 'block',
         textAlign: 'initial',
       },
+      // toolTip:{
+      //   fontSize: '50px'
+      // }
 })
 

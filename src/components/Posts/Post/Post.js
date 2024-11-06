@@ -8,6 +8,8 @@ import {
   Button,
   Typography,
   ButtonBase,
+  Tooltip,
+  Zoom
 } from "@material-ui/core";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import ThumbUpAltOutlined from "@material-ui/icons/ThumbUpAltOutlined";
@@ -27,6 +29,15 @@ const Post = ({ post, setCurrentId }) => {
   const openPost = () => {
     history.push(`/post/${post._id}`);
     console.log(post._id);
+  };
+  const [toolTipOpen, settoolTipOpen] = React.useState(false);
+
+  const handleTooltipClose = () => {
+    settoolTipOpen(false);
+  };
+
+  const handleTooltipOpen = () => {
+    settoolTipOpen(true);
   };
   const userId = user?.result?.sub || user?.result?._id
   const [likes, setLikes] = useState(post?.likes)
@@ -107,7 +118,7 @@ const Post = ({ post, setCurrentId }) => {
         
 
         <div className={classes.details}>
-          <Typography variant="body2" color="textSecondary">
+          <Typography variant="body2" color="textSecondary" style={{lineHeightStep: '2'}}>
             {post.tags.map((tag) => `#${tag} `)}
           </Typography>
         </div>
@@ -115,9 +126,26 @@ const Post = ({ post, setCurrentId }) => {
           {post.title}
         </Typography>
         <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {post.message}
-          </Typography>
+        
+        {
+          post.message.length >= 150 ? 
+            (<Tooltip
+              TransitionComponent={Zoom}
+              title={<Typography variant="body2" component="p">{post.message}</Typography>} // Set font size only for the Tooltip content
+              placement="right"
+              className={classes.toolTip}
+            >
+              <Typography variant="body2" color="textSecondary" component="p">
+                {post.message.substring(0, 150) + "..."}
+              </Typography>
+            </Tooltip>)
+           : 
+            (<Typography variant="body2" color="textSecondary" component="p">
+              {post.message}
+            </Typography>)
+          
+        }
+          
         </CardContent>
       </ButtonBase>
       <CardActions className={classes.cardActions}>
