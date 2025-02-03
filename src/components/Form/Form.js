@@ -6,12 +6,11 @@ import {
   Button,
   Typography,
   Paper,
-  DialogTitle,
 } from "@material-ui/core";
 import userStyles from "./styles";
 import { createPost, updatePost } from "../../actions/posts";
 import { useHistory } from "react-router-dom";
-
+import { toast } from "react-toastify";
 // we have to get the id inorder to update
 
 const Form = ({ currentId, setCurrentId }) => {
@@ -22,6 +21,7 @@ const Form = ({ currentId, setCurrentId }) => {
     tags: "",
     selectedFile: "",
   });
+  const [isValidData, setIsValidData] = useState(false);
   const classes = userStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -35,10 +35,22 @@ const Form = ({ currentId, setCurrentId }) => {
       setPostData(post);
     }
   }, [post]); //accept callback and dependency array
+  useEffect(()=>{
+    if (!postData.message || !postData.title || !postData.selectedFile) {
+      setIsValidData(false);
+    } else {
+      setIsValidData(true);
+    }
+  },[postData])
   const user = JSON.parse(localStorage.getItem("profile"));
   const handleSubmit = (e) => {
     e.preventDefault(); //stop refresh
-
+    // validation
+    console.log("Mydata", postData);
+    if (!postData.selectedFile) {
+      toast.error("First select image for post");
+      return;
+    }
     if (currentId) {
       //if we have currentId, then we want to update the post
       dispatch(
@@ -47,10 +59,10 @@ const Form = ({ currentId, setCurrentId }) => {
     } else {
       // otherwise we want to create a new post
       dispatch(createPost({ ...postData, name: user?.result?.name }, history));
-      
     }
     clear(); //on click of submit button
   };
+  
   //clar the input fiels
   const clear = () => {
     setCurrentId(null);
@@ -75,42 +87,34 @@ const Form = ({ currentId, setCurrentId }) => {
     <Paper className={classes.paper} elevation={6}>
       <form
         autoComplete="off"
-        noValidate
+        // noValidate
         className={`${classes.form} ${classes.root}`}
         onSubmit={handleSubmit}
       >
         <Typography variant="h6">
           {currentId ? "Editing" : "Creating"} a Memory
         </Typography>
-        {/* <TextField
-          name="creator"
-          variant="outlined"
-          label="Creator"
-          fullWidth
-          value={postData.creator}
-          onChange={(event) =>
-            setPostData({ ...postData, creator: event.target.value })
-          }
-        /> */}
         <TextField
           name="title"
           variant="outlined"
           label="Title"
           fullWidth
           value={postData.title}
-          onChange={(event) =>
-            setPostData({ ...postData, title: event.target.value })
-          }
+          required
+          onChange={(event) => {
+            setPostData({ ...postData, title: event.target.value });
+          }}
         />
         <TextField
           name="message"
           variant="outlined"
           label="Message"
           fullWidth
+          required
           value={postData.message}
-          onChange={(event) =>
-            setPostData({ ...postData, message: event.target.value })
-          }
+          onChange={(event) => {
+            setPostData({ ...postData, message: event.target.value });
+          }}
         />
         <TextField
           name="tags"
@@ -118,22 +122,24 @@ const Form = ({ currentId, setCurrentId }) => {
           label="Tags"
           fullWidth
           value={postData.tags}
-          onChange={(event) =>
+          onChange={(event) => {
             setPostData({
               ...postData,
               tags: event.target.value.split(",").map((str) => str.trim()),
-            })
-          }
+            });
+          }}
         />
         <div className={classes.fileInput}>
           <FileBase
             type="file"
             multiple={false}
-            onDone={({ base64 }) =>
-              setPostData({ ...postData, selectedFile: base64 })
-            }
+            required
+            onDone={({ base64 }) => {
+              setPostData({ ...postData, selectedFile: base64 });
+            }}
           />
         </div>
+
         <Button
           className={classes.buttonSubmit}
           variant="contained"
