@@ -38,7 +38,7 @@ export default (state =
       return {...state, posts: state.posts.map((post)=> (post._id === action.payload._id ? action.payload : post))}
     case LIKE:
       return {...state, posts: state.posts.map((post) =>
-        post._id === action.payload._id ? action.payload : post
+        post._id === action.payload._id ? {...post, likes: action.payload.likes } : post
       )};
     case COMMENT:
       return {...state, posts: state.posts.map((post) =>

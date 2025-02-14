@@ -8,7 +8,7 @@ import {
   Paper,
 } from "@material-ui/core";
 import userStyles from "./styles";
-import { createPost, updatePost } from "../../actions/posts";
+import { createPost, createPostWithAws, updatePost, updatePostWithAws } from "../../actions/posts";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 // we have to get the id inorder to update
@@ -46,19 +46,33 @@ const Form = ({ currentId, setCurrentId }) => {
   const handleSubmit = (e) => {
     e.preventDefault(); //stop refresh
     // validation
-    console.log("Mydata", postData);
+    console.log("Mydata", postData, typeof postData.selectedFile);
     if (!postData.selectedFile) {
       toast.error("First select image for post");
       return;
     }
     if (currentId) {
-      //if we have currentId, then we want to update the post
-      dispatch(
-        updatePost(currentId, { ...postData, name: user?.result?.name })
-      );
+      if(typeof postData === 'string' && postData.selectedFile.startsWith("data:image/") ){
+        // either base64 type image is already uploaded, or a new image of base64 type is selected, 
+        // just call the updatePost, as it is
+        dispatch(
+          updatePost(currentId, { ...postData, name: user?.result?.name })
+        );
+      }else{
+        // image is presigned url starting with https:// or newly selected image of type File
+        // if it is url, we want to take out image name from it and add it to selectedFile
+        // if its a file object we wanr to upload it to aws s3 then update the name
+        dispatch(
+          updatePostWithAws(currentId, { ...postData, name: user?.result?.name })
+        );
+      }
     } else {
       // otherwise we want to create a new post
-      dispatch(createPost({ ...postData, name: user?.result?.name }, history));
+      if(typeof postData.selectedFile === 'string'){
+        dispatch(createPost({ ...postData, name: user?.result?.name }, history));
+      }else{
+        dispatch(createPostWithAws({...postData, name: user?.result?.name}, history))
+      } 
     }
     clear(); //on click of submit button
   };
@@ -74,6 +88,10 @@ const Form = ({ currentId, setCurrentId }) => {
       selectedFile: "",
     });
   };
+  const handleImageSelectionForAws = (e) => {
+    console.log(e.target.files[0])
+    setPostData({ ...postData, selectedFile: e.target.files[0]})
+  }
   if (!user?.result?.name) {
     return (
       <Paper className={classes.paper} elevation={6}>
@@ -133,11 +151,12 @@ const Form = ({ currentId, setCurrentId }) => {
           <FileBase
             type="file"
             multiple={false}
-            required
+            // required
             onDone={({ base64 }) => {
               setPostData({ ...postData, selectedFile: base64 });
             }}
           />
+          <input type="file" multiple={false} onChange={handleImageSelectionForAws} />
         </div>
 
         <Button

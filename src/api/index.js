@@ -12,18 +12,34 @@ API.interceptors.request.use((req) => {
   return req;
 });
 // export const fetchPosts = () => axios.get(url);
-export const fetchPost = (id) => API.get(`/posts/${id}`)
+export const fetchPost = (id) => API.get(`/posts/${id}`);
 export const fetchPosts = (page) => API.get(`/posts?page=${page}`);
-export const fetchPostsBySearch = (query) => API.get(`/posts/search?searchQuery=${query.search || 'none'}&tags=${query.tags}`)
+export const fetchPostsBySearch = (query) =>
+  API.get(
+    `/posts/search?searchQuery=${query.search || "none"}&tags=${query.tags}`
+  );
 export const createPost = (newPost) => API.post("/posts", newPost);
-
+export const getPresignedUrlAndUpload = async (post, image) => {
+  
+    const newName = Date.now().toString() + "_" + image.name;
+    const { preSignedUrl, fileName } = await API.get(
+      `/posts/getPresignedUrlForUploading?imageType=${image.type}&imageName=${newName}`
+    );
+    await axios.put(preSignedUrl, image); //no need to await that
+    console.log("uploaded the image to aws");
+    post.selectedFile = fileName;
+    return API.post("/posts", post)
+};
+export const uploadUsingPresignedUrl = (preSignedUrl, file) => axios.put(preSignedUrl, file)
+export const getPresignedUrl = (newName, imageType) => API.get(`/posts/getPresignedUrlForUploading?imageType=${imageType}&imageName=${newName}`)
 export const updatePost = (id, updatedPost) =>
   API.patch(`/posts/${id}`, updatedPost);
 
 export const deletePost = (id) => API.delete(`/posts/${id}`);
 
 export const likePost = (id) => API.patch(`/posts/${id}/likePost`);
-export const comment = (value, id) => API.post(`/posts/${id}/commentPost`, {value})
+export const comment = (value, id) =>
+  API.post(`/posts/${id}/commentPost`, { value });
 
 export const signIn = (formData) => API.post("/user/signin", formData);
 export const signUp = (formData) => API.post("/user/signup", formData);
