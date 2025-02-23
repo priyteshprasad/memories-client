@@ -148,14 +148,14 @@ const Form = ({ currentId, setCurrentId }) => {
           }}
         />
         <div className={classes.fileInput}>
-          <FileBase
+          {/* <FileBase
             type="file"
             multiple={false}
             // required
             onDone={({ base64 }) => {
               setPostData({ ...postData, selectedFile: base64 });
             }}
-          />
+          /> removing base64 upload method */}
           <input type="file" multiple={false} onChange={handleImageSelectionForAws} />
         </div>
 
